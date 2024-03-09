@@ -6,6 +6,13 @@ class DBclass:
         self.connection = sqlite3.connect(database_file)
         self.cursor = self.connection.cursor()
 
-    def create_user(self, chat_id):
+    def create_user(self, chat_id, name):
         with self.connection:
-            self.cursor.execute('INSERT INTO user (chat_id) VALUES (?)', (chat_id,))
+            self.cursor.execute('SELECT * FROM user WHERE chat_id = ?', (chat_id,))
+            if self.cursor.fetchone() is None:
+                self.cursor.execute('INSERT INTO user (chat_id, name, isSubscribed, isAdmin) VALUES (?, ?, TRUE, FALSE)', (chat_id, name,))
+            else:
+                pass
+    def get_user(self, chat_id):
+        with self.connection:
+            return list(self.cursor.execute('SELECT * FROM user WHERE chat_id = ?', (chat_id,)))[0]
