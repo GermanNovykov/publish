@@ -5,7 +5,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text, MediaGroupFilter
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import KeyboardButton
+from aiogram.types import KeyboardButton, ContentType
 from aiogram.utils.deep_linking import get_start_link
 from aiogram.utils import executor
 from aiogram.utils.markdown import hide_link
@@ -26,13 +26,19 @@ async def start(message: types.Message):
     db.create_user(message.from_user.id, message.from_user.first_name)
     await message.answer('Hi man')
 
-@dp.message_handler()
+@dp.message_handler(content_types=ContentType.ANY)
 async def handle_message(message: types.Message):
     try:
         if db.get_user(message.from_user.id)[4] == 1:
-            await message.answer('I am admin')
+            # create a post and post to subscribers
+            all_subs = db.get_all_subscribers()
+            for sub in all_subs:
+                messagetosave = await message.send_copy(chat_id=sub[1])
+            await message.answer('Пост успешно рассылан епта')
         else:
             await message.answer('I am not an admin')
+
+
     except Exception as e:
         print(e)
 

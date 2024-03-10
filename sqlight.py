@@ -16,3 +16,6 @@ class DBclass:
     def get_user(self, chat_id):
         with self.connection:
             return list(self.cursor.execute('SELECT * FROM user WHERE chat_id = ?', (chat_id,)))[0]
+    def get_all_subscribers(self):
+        with self.connection:
+            return list(self.cursor.execute('SELECT * FROM user WHERE isSubscribed = 1'),)
