@@ -5,7 +5,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text, MediaGroupFilter
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import KeyboardButton, ContentType
+from aiogram.types import KeyboardButton, ContentType, CallbackQuery
 from aiogram.utils.deep_linking import get_start_link
 from aiogram.utils import executor
 from aiogram.utils.markdown import hide_link
@@ -24,7 +24,7 @@ dp = Dispatcher(bot, storage=storage)
 @dp.message_handler(commands='start')
 async def start(message: types.Message):
     db.create_user(message.from_user.id, message.from_user.first_name)
-    await message.answer('Hi man')
+    await message.answer('Здравствуйте, этот бот подписывает вас на салон епта')
 
 @dp.message_handler(content_types=ContentType.ANY)
 async def handle_message(message: types.Message):
@@ -48,7 +48,8 @@ async def handle_message(message: types.Message):
     except Exception as e:
         print(e)
 @dp.callback_query_handler(str.startswith('deletepost'))
-async def delete_post():
-    
+async def delete_post(call: CallbackQuery):
+    await call.message.edit_text("Удалено")
+
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
