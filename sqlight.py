@@ -27,3 +27,6 @@ class DBclass:
     def link_post_to_message(self, message_id, postmsgid):
         with self.connection:
             self.cursor.execute('INSERT INTO post_message (message_id, postid) VALUES (?, ?)', (message_id, postmsgid))
+    def get_all_posts_by_postid(self, postid):
+        with self.connection:
+            return list(self.cursor.execute('SELECT * FROM post_message WHERE postid = ?', (postid,)))

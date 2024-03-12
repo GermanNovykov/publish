@@ -51,5 +51,8 @@ async def handle_message(message: types.Message):
 async def delete_post(call: CallbackQuery):
     await call.message.edit_text("Удалено")
 
+    for post in db.get_all_posts_by_postid(int(call.text[10:])):
+        await bot.delete_message(post[1])
+
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
