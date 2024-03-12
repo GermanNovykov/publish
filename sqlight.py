@@ -27,6 +27,3 @@ class DBclass:
     def link_post_to_message(self, message_id, postmsgid):
         with self.connection:
             self.cursor.execute('INSERT INTO post_message (message_id, postid) VALUES (?, ?)', (message_id, postmsgid))
-    def delete_message(self, message_id):
-        with self.connection:
-            self.cursor.execute('DELETE FROM message WHERE message_id = ?', (message_id,))
