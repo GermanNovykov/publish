@@ -19,3 +19,5 @@ class DBclass:
     def get_all_subscribers(self):
         with self.connection:
             return list(self.cursor.execute('SELECT * FROM user WHERE isSubscribed = 1'),)
+    def nullifier():
+        return 0
