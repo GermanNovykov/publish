@@ -32,8 +32,14 @@ async def handle_message(message: types.Message):
         if db.get_user(message.from_user.id)[4] == 1:
             # create a post and post to subscribers
             all_subs = db.get_all_subscribers()
+            postid = db.write_post(message.message_id, message.text)
             for sub in all_subs:
                 messagetosave = await message.send_copy(chat_id=sub[1])
+                db.link_post_to_message(messagetosave.message_id, postid)
+
+            markup = types.InlineKeyboardMarkup()
+            item1 = types.InlineKeyboardButton("Удалить", callback_data=f'deltepost{postid}')
+            markup.add(item1)
             await message.answer('Пост успешно рассылан епта')
         else:
             await message.answer('I am not an admin')
@@ -41,6 +47,8 @@ async def handle_message(message: types.Message):
 
     except Exception as e:
         print(e)
-
+@dp.callback_query_handler(str.startswith('deletepost'))
+async def delete_post():
+    
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
