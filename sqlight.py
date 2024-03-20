@@ -19,5 +19,14 @@ class DBclass:
     def get_all_subscribers(self):
         with self.connection:
             return list(self.cursor.execute('SELECT * FROM user WHERE isSubscribed = 1'),)
-    def nullifier():
-        return 0
+    def write_post(self, message_id, content):
+        with self.connection:
+            self.cursor.execute('INSERT INTO post (message_id, content) VALUES (?, ?)', (message_id, content,))
+            created_post_id = self.cursor.lastrowid
+            return created_post_id
+    def link_post_to_message(self, message_id, postmsgid):
+        with self.connection:
+            self.cursor.execute('INSERT INTO post_message (message_id, postid) VALUES (?, ?)', (message_id, postmsgid))
+    def get_all_posts_by_postid(self, postid):
+        with self.connection:
+            return list(self.cursor.execute('SELECT * FROM post_message WHERE postid = ?', (postid,)))
