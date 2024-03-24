@@ -15,7 +15,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             'format': 'best',
             'outtmpl': '%(id)s.%(ext)s',  # Save file as <video_id>.<extension>
         }
-        msg = await update.message.reply_text('Ща заебашу')
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
                 # Download video
@@ -24,7 +23,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 # Send video back to user
                 await context.bot.send_video(chat_id=update.effective_chat.id, video=open(video_filename, 'rb'))
                 os.remove(video_filename)
-                newmsg = await update.message.reply_text('На нахуй')
             except Exception as e:
                 os.remove(video_filename)
                 await update.message.reply_text('An error occurred: ' + str(e))
