@@ -2,7 +2,6 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 import yt_dlp
 import os
-# Function to handle start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text('Hello! Send me a TikTok, YouTube, or Instagram link, and I will download the video for you.')
 
